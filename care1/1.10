@@ -1,0 +1,2 @@
+Requirement already satisfied: Django in c:\users\projects\pycharmprojects\care\venv\lib\site-packages (2.0.7)
+Requirement already satisfied: pytz in c:\users\projects\pycharmprojects\care\venv\lib\site-packages (from Django) (2018.5)

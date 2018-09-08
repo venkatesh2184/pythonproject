@@ -1,0 +1,184 @@
+{% extends "portal/menu.html" %}
+{% load static humanize %}
+{% block title %}Quick Quote{% endblock %}
+
+
+{% block content %}
+
+<form class="pure-form pure-form-aligned" method="GET" action="#">
+{% csrf_token %}
+{{ form.state }}
+	<fieldset>
+		<div class="care-form-card">
+			<div class="care-qq-header">
+				Quick Quote for {{ form.state.initial }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.agent_name.auto_id }}">Agent Name</label>
+				{{ form.agent_name }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.agent_email.auto_id }}">Email</label>
+				{{ form.agent_email }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.agency_name.auto_id }}">Agency</label>
+				{{ form.agency_name }}
+			</div>
+		</div>
+
+		<div class="care-form-card">
+			<legend class="care-form-legend">Insured</legend>
+			<div class="pure-control-group">
+				<label for="{{ form.insured_name.auto_id }}">Insured Name</label>
+				{{ form.insured_name }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.title.auto_id }}">Title</label>
+				{{ form.title }} &nbsp; {{ form.title_other }}
+			</div>
+			<div class="care-qq-field-error">
+				{{ form.title_other.errors }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.dob.auto_id }}">Date of Birth</label>
+				{{ form.dob }}
+			</div>
+
+		</div>
+
+		<div class="care-form-card">
+			<legend class="care-form-legend">Primary Details</legend>
+			<div class="pure-control-group">
+				<label for="{{ form.primary_practice_street.auto_id }}">Address</label>
+				{{ form.primary_practice_street }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.primary_practice_building.auto_id }}"></label>
+				{{ form.primary_practice_building }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.primary_practice_city.auto_id }}">City</label>
+				{{ form.primary_practice_city }}
+			</div>
+			<div class="pure-control-group">
+				<label>State</label>
+				{{ form.state.initial }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.primary_practice_zip_code.auto_id }}">Zip Code</label>
+				{{ form.primary_practice_zip_code }}
+			</div>
+
+
+		</div>
+
+
+
+		<div class="care-form-card">
+			<legend class="care-form-legend">Additional Coverage</legend>
+			<div class="pure-control-group">
+				<label for="{{ form.entity_coverage.auto_id }}"></label>
+				{{ form.entity_coverage }} Coverage for Property?
+			</div>
+			<div class="care-qq-field-error">
+				{{ form.entity_coverage.errors }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.entity_note.auto_id }}">Names</label>
+				{{ form.entity_note }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.professional_coverage.auto_id }}"></label>
+				{{ form.professional_coverage }} Coverage for Casualty?
+			</div>
+			<div class="care-qq-field-error">
+				{{ form.professional_coverage.errors }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.professional_note.auto_id }}">Names</label>
+				{{ form.professional_note }}
+			</div>
+		</div>
+
+		<div class="care-form-card">
+			<legend class="care-form-legend">History</legend>
+			<div class="pure-control-group">
+				<label for="{{ form.claims_last_10_years.auto_id }}">Number of Claims Last 10 Years</label>
+				{{ form.claims_last_10_years }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.open_claims.auto_id }}">Number of Claims Open</label>
+				{{ form.open_claims }}
+			</div>
+			<div class="pure-control-group">
+				<label for="{{ form.closed_claims.auto_id }}">Number of Claims Closed</label>
+				{{ form.closed_claims }}
+			</div>
+			<div class="care-qq-field-error">
+				{{ form.closed_claims.errors }}
+			</div>
+
+
+		</div>
+
+		<div class="care-form-card">
+			<br>
+			{% if form.premiums %}
+			<table class="pure-table pure-table-bordered">
+				<tbody>
+					<tr>
+						<td class="care-qq-header">
+							Quick Quote Premiums
+						</td>
+						<td colspan="3" align="center"><b>Deductibles</b></td>
+					</tr>
+				<tr>
+					<td><b>Limits</b></td>
+					{% for ded_value, ded_text in form.deductible.field.choices %}
+						<td>
+							{{ded_text}}
+						</td>
+					{% endfor %}
+				</tr>
+				{% for premium in form.premiums %}
+					{% if premium.deductible.value == 0 %}
+						<tr>
+							<td>
+								{{premium.limit}}
+							</td>
+					{% endif %}
+					<td>
+						${{premium.premium|floatformat:2|intcomma}}
+					</td>
+				{% endfor %}
+				</tbody>
+			</table>
+			{% endif %}
+			<br>
+
+			<div class="pure-control-group">
+				<label>&nbsp;</label>
+{#              <form action="/success" method="post">#}
+{#                 <a class="btn btn-primary" href="/success/" role="button">Link</a>#}
+
+				<button id="calculate" class="pure-button care-button-primary">
+					<i class="fa fa-calculator"></i> Calculate Premiums
+				</button>
+			</div>
+			</div>{{ form.clicked_button }}
+		</div>
+	</fieldset>
+</form>
+{% endblock %}
+
+<div class="small-break"></div>
+<script>
+	$('.bob').hide();
+	$("button.care-button-primary").click(function( event ) {
+		event.preventDefault();
+		$('#calculate').val(this.id);
+		$('.bob').show();
+	});
+</script>
+id_clicked_button
